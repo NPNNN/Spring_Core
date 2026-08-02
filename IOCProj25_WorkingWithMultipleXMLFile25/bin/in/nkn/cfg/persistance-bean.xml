@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Load properties file -->
+    <context:property-placeholder location="in/nkn/commons/application.properties"/>
+
+    <!-- HikariCP DataSource -->
+    <bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource">
+
+        <!-- JDBC connection -->
+        <property name="jdbcUrl" value="${dao.info.jdbcUrl}" />
+        <property name="username" value="${dao.info.user}" />
+        <property name="password" value="${dao.info.password}" />
+        <property name="driverClassName" value="${dao.info.driverClassName}" />
+
+        <!-- Pool settings -->
+        <property name="minimumIdle" value="10" />
+        <property name="maximumPoolSize" value="20" />
+        <property name="connectionTimeout" value="2000" />
+
+    </bean>
+
+    <!-- DAO -->
+    <bean id="mysqlDaoImpl" class="in.nkn.dao.CustomerMySQLDAOImpl">
+
+        <constructor-arg name="dataSource" ref="hikariDataSource"/>
+
+    </bean>
+
+</beans>
