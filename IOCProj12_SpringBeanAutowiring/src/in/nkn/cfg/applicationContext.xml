@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+           
+       <!-- Configuring the dependent bean -->
+       <bean id="courier1" class="in.nkn.bean.BlueDart" primary="true"/>
+       <bean id="courier2" class="in.nkn.bean.DTDC"/>
+       <bean id="courier3" class="in.nkn.bean.FristFlilght"/>
+       
+       <!-- Configuring the target bean -->
+       <bean id="fpkt" class="in.nkn.bean.Flipcard" autowire="byType">
+      
+       </bean>
+        
+    
+   
+</beans>

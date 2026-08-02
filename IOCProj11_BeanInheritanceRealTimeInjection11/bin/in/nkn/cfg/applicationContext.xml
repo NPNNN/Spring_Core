@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Parent bean (COMMON CONFIG) -->
+    <bean id="baseDataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="username" value="root"/>
+        <property name="password" value="12345678"/>
+
+    </bean>
+
+    <!-- Child 1: DriverManagerDataSource -->
+    <bean id="mysqlDataSource"
+          parent="baseDataSource">
+
+        <property name="url" value="jdbc:mysql:///spring_core"/>
+    </bean>
+
+    <!-- Child 2: Hikari (separate correct config) -->
+    <bean id="hikariDataSource"
+          class="com.zaxxer.hikari.HikariDataSource">
+
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql:///spring_core"/>
+        <property name="username" value="root"/>
+        <property name="password" value="12345678"/>
+
+        <property name="minimumIdle" value="10"/>
+        <property name="maximumPoolSize" value="20"/>
+        <property name="connectionTimeout" value="2000"/>
+
+    </bean>
+
+    <!-- DAO -->
+    <bean id="mysqlDaoImpl"
+          class="in.nkn.dao.CustomerMySQLDAOImpl">
+
+        <constructor-arg name="dataSource"
+                         ref="hikariDataSource"/>
+    </bean>
+
+    <!-- Service -->
+    <bean id="serviceImpl"
+          class="in.nkn.service.CustomerMgmtServiceImpl">
+
+        <constructor-arg name="dao"
+                         ref="mysqlDaoImpl"/>
+    </bean>
+
+    <!-- Controller -->
+    <bean id="controller"
+          class="in.nkn.controller.MainController">
+
+        <constructor-arg name="service"
+                         ref="serviceImpl"/>
+    </bean>
+
+</beans>
