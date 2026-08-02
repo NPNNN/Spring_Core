@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+           
+  <!-- Use the properties file to load require data -->
+  <bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="in/nkn/properties/application.properties"/>
+  </bean>
+  
+   <!-- DataSource Configuration -->
+    <bean id="mysqlDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value='${jdbc.driver}'/>
+        <property name="url" value='${jdbc.url}'/>
+        <property name="username" value='${jdbc.user}'/>
+        <property name="password" value='${jdbc.password}'/>
+        
+        
+     </bean>
+     
+     <!-- DAO Configuration -->
+     <bean id="mysqlDaoImpl" class="in.nkn.dao.CustomerMySQLDAOImpl">
+         <constructor-arg name="dataSource" ref="mysqlDataSource"/>
+      </bean>
+      
+      <!-- Serivice Configuration -->
+      <bean id="serviceImpl" class="in.nkn.service.CustomerMgmtServiceImpl">
+         <constructor-arg name="dao" ref="mysqlDaoImpl"/>
+      </bean>
+      
+      <!-- Controller Configuration -->
+      <bean id="controller" class="in.nkn.controller.MainController">
+         <constructor-arg name="service" ref="serviceImpl"/>
+      </bean>
+    
+</beans>
